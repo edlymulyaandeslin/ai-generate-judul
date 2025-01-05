@@ -31,15 +31,10 @@ Route::middleware("auth")->group(function () {
     // History Order routing
     Route::get("/history-order", [HistoryOrderController::class, "index"])->name("history.order");
 
-
     // History Judul routing
     Route::get("/history-judul", [HistoryJudulController::class, "index"])->name("history.judul");
     Route::get("/history-judul/{aijudul}", [HistoryJudulController::class, "show"])->name("history.show");
     Route::delete("/history-judul/{aijudul}", [HistoryJudulController::class, "destroy"])->name("history.destroy");
-
-    Route::get("/user", [UserController::class, "index"])->name("user.index");
-    Route::get("/user/{user}/edit", [UserController::class, "edit"])->name("user.edit");
-    Route::put("/user/{user}", [UserController::class, "update"])->name("user.update");
 });
 
 // Payment webhook

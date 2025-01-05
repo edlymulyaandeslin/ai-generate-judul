@@ -11,7 +11,7 @@ export default function PaymentSuccess({ orderId }) {
                         Payment Successfully
                     </h1>
                     <div>
-                        <BsPatchCheck className="text-green-500 text-7xl" />
+                        <BsPatchCheck className="text-green-400 text-7xl" />
                     </div>
                     <h1 className="text-2xl font-semibold text-center">
                         Order ID : {orderId}
