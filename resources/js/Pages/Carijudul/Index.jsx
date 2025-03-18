@@ -15,9 +15,12 @@ export default function Index() {
 
     const { data, setData, post, errors } = useForm({
         jurusan: "",
+        jenis_aplikasi: "",
+        basis: "",
         jenis_penelitian: "",
         lokasi: "",
         tingkat_kesulitan: "",
+        additional_prompt: "",
         ai_response: "",
     });
 
@@ -26,6 +29,8 @@ export default function Index() {
 
         if (
             !data.jurusan ||
+            !data.jenis_aplikasi ||
+            !data.basis ||
             !data.jenis_penelitian ||
             !data.lokasi ||
             !data.tingkat_kesulitan
@@ -39,7 +44,32 @@ export default function Index() {
 
         setLoading(true);
 
-        const prompt = `Berikan saya 3 referensi judul ${data.jenis_penelitian} untuk jurusan ${data.jurusan} yang lokasi penelitian berada di ${data.lokasi} dengan tingkat kesulitan pembuatan ${data.tingkat_kesulitan}. berikan poin poin penting untuk setiap judulnya.`;
+        //jurusan = sistem informasi
+        //jenis aplikasi = sistem pakar / spk / sistem informasi
+        //berbasis = web
+        //jenis penelitian = skripsi
+        //tingkat kesulitan = medium
+        //lokasi penelitian = lokasi x
+        //prompt tambahan user = saya ingin membahas tentang xxx
+
+        // Bagian optional untuk tambahan prompt
+        let optionalText = "";
+        if (data.additional_prompt) {
+            optionalText = ` Selain itu, ${data.additional_prompt} secara mendalam.`;
+        }
+
+        // Tambahan prompt khusus untuk jenis aplikasi tertentu
+        let additionalMethodPrompt = "";
+        const lowerJenisAplikasi = data.jenis_aplikasi.toLowerCase();
+        if (
+            lowerJenisAplikasi === "sistem pakar" ||
+            lowerJenisAplikasi === "sistem pendukung keputusan"
+        ) {
+            additionalMethodPrompt = " Sertakan juga metode sistem pakarnya.";
+        }
+
+        // Prompt final
+        const prompt = `Berikan saya 5 referensi judul ${data.jenis_penelitian} untuk jurusan ${data.jurusan} dengan fokus pada pengembangan ${data.jenis_aplikasi} berbasis ${data.basis}. Penelitian dilakukan di ${data.lokasi} dengan tingkat kesulitan ${data.tingkat_kesulitan}. Sertakan rincian poin penting pada setiap judul, meliputi latar belakang masalah, tujuan penelitian, metodologi, inovasi, dan keunggulan.${additionalMethodPrompt}${optionalText}`;
 
         const responseAI = await geminiRequest(prompt);
 
@@ -178,22 +208,149 @@ export default function Index() {
 
                         <div className="my-4">
                             <h1 className="mb-4 text-lg font-bold text-center">
+                                Jenis Aplikasi
+                            </h1>
+                            <div className="flex flex-wrap justify-center gap-4">
+                                <label
+                                    htmlFor="sistem pakar"
+                                    className={`btn ${
+                                        data.jenis_aplikasi == "sistem pakar"
+                                            ? "btn-accent"
+                                            : ""
+                                    }`}
+                                >
+                                    <input
+                                        id="sistem pakar"
+                                        type="radio"
+                                        name="jenis_aplikasi"
+                                        value={"sistem pakar"}
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            setData(
+                                                "jenis_aplikasi",
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    Sistem Pakar
+                                </label>
+
+                                <label
+                                    htmlFor="sistem pendukung keputusan"
+                                    className={`btn ${
+                                        data.jenis_aplikasi ==
+                                        "sistem pendukung keputusan"
+                                            ? "btn-accent"
+                                            : ""
+                                    }`}
+                                >
+                                    <input
+                                        id="sistem pendukung keputusan"
+                                        type="radio"
+                                        name="jenis_aplikasi"
+                                        value={"sistem pendukung keputusan"}
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            setData(
+                                                "jenis_aplikasi",
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    Sistem Pendukung Keputusan
+                                </label>
+                                <label
+                                    htmlFor="sistem informasi"
+                                    className={`btn ${
+                                        data.jenis_aplikasi ==
+                                        "sistem informasi"
+                                            ? "btn-accent"
+                                            : ""
+                                    }`}
+                                >
+                                    <input
+                                        id="sistem informasi"
+                                        type="radio"
+                                        name="jenis_aplikasi"
+                                        value={"sistem informasi"}
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            setData(
+                                                "jenis_aplikasi",
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    Sistem Informasi
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="my-4">
+                            <h1 className="mb-4 text-lg font-bold text-center">
+                                Berbasis
+                            </h1>
+                            <div className="flex justify-center gap-4">
+                                <label
+                                    htmlFor="web"
+                                    className={`btn ${
+                                        data.basis == "web" ? "btn-info" : ""
+                                    }`}
+                                >
+                                    <input
+                                        id="web"
+                                        type="radio"
+                                        name="basis"
+                                        value={"web"}
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            setData("basis", e.target.value)
+                                        }
+                                    />
+                                    Web
+                                </label>
+
+                                <label
+                                    htmlFor="mobile"
+                                    className={`btn ${
+                                        data.basis == "mobile"
+                                            ? "btn-secondary"
+                                            : ""
+                                    }`}
+                                >
+                                    <input
+                                        id="mobile"
+                                        type="radio"
+                                        name="basis"
+                                        value={"mobile"}
+                                        className="hidden"
+                                        onChange={(e) =>
+                                            setData("basis", e.target.value)
+                                        }
+                                    />
+                                    Mobile
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="my-4">
+                            <h1 className="mb-4 text-lg font-bold text-center">
                                 Tingkat Kesulitan
                             </h1>
                             <div className="flex justify-center gap-4">
                                 <label
-                                    htmlFor="easy"
+                                    htmlFor="mudah"
                                     className={`btn ${
-                                        data.tingkat_kesulitan == "easy"
+                                        data.tingkat_kesulitan == "mudah"
                                             ? "btn-success"
                                             : ""
                                     }`}
                                 >
                                     <input
-                                        id="easy"
+                                        id="mudah"
                                         type="radio"
                                         name="tingkat_kesulitan"
-                                        value={"easy"}
+                                        value={"mudah"}
                                         className="hidden"
                                         onChange={(e) =>
                                             setData(
@@ -202,22 +359,22 @@ export default function Index() {
                                             )
                                         }
                                     />
-                                    Easy
+                                    Mudah
                                 </label>
 
                                 <label
-                                    htmlFor="medium"
+                                    htmlFor="menengah"
                                     className={`btn ${
-                                        data.tingkat_kesulitan == "medium"
+                                        data.tingkat_kesulitan == "menengah"
                                             ? "btn-warning"
                                             : ""
                                     }`}
                                 >
                                     <input
-                                        id="medium"
+                                        id="menengah"
                                         type="radio"
                                         name="tingkat_kesulitan"
-                                        value={"medium"}
+                                        value={"menengah"}
                                         className="hidden"
                                         onChange={(e) =>
                                             setData(
@@ -226,22 +383,22 @@ export default function Index() {
                                             )
                                         }
                                     />
-                                    Medium
+                                    Menengah
                                 </label>
 
                                 <label
-                                    htmlFor="hard"
+                                    htmlFor="sulit"
                                     className={`btn ${
-                                        data.tingkat_kesulitan == "hard"
+                                        data.tingkat_kesulitan == "sulit"
                                             ? "btn-error"
                                             : ""
                                     }`}
                                 >
                                     <input
-                                        id="hard"
+                                        id="sulit"
                                         type="radio"
                                         name="tingkat_kesulitan"
-                                        value={"hard"}
+                                        value={"sulit"}
                                         className="hidden"
                                         onChange={(e) =>
                                             setData(
@@ -250,7 +407,7 @@ export default function Index() {
                                             )
                                         }
                                     />
-                                    Hard
+                                    Sulit
                                 </label>
                             </div>
                         </div>
@@ -270,6 +427,27 @@ export default function Index() {
                                     }
                                     required
                                 />
+                            </div>
+                        </div>
+
+                        <div className="my-4">
+                            <h1 className="mb-4 text-lg font-bold text-center">
+                                Prompt
+                                <br />
+                                <span className="text-xs">(opsional)</span>
+                            </h1>
+
+                            <div className="w-full max-w-md mx-auto">
+                                <textarea
+                                    placeholder="ex: saya ingin membahas x"
+                                    className="w-full textarea textarea-bordered"
+                                    onChange={(e) =>
+                                        setData(
+                                            "additional_prompt",
+                                            e.target.value
+                                        )
+                                    }
+                                ></textarea>
                             </div>
                         </div>
 
