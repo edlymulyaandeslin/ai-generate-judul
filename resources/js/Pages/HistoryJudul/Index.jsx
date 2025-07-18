@@ -4,11 +4,10 @@ import { Head, router } from "@inertiajs/react";
 import axios from "axios";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 export default function Index({ listJudul }) {
-    const [view, setView] = useState("");
+    const [view, setView] = useState([]);
 
     const handleDelete = (id) => {
         const confirm = window.confirm("Are you sure?");
@@ -22,7 +21,7 @@ export default function Index({ listJudul }) {
         const response = await axios.get(route("history.show", id));
         const aiResponse = response.data.ai_response;
 
-        setView(aiResponse);
+        setView(JSON.parse(aiResponse));
 
         document.getElementById("modalView").showModal();
     };
@@ -63,10 +62,10 @@ export default function Index({ listJudul }) {
                                             <span
                                                 className={`badge ${
                                                     judul.tingkat_kesulitan ===
-                                                    "easy"
+                                                    "mudah"
                                                         ? "badge-success"
                                                         : judul.tingkat_kesulitan ===
-                                                          "medium"
+                                                          "menengah"
                                                         ? "badge-warning"
                                                         : "badge-error"
                                                 }`}
@@ -101,18 +100,88 @@ export default function Index({ listJudul }) {
                         </table>
 
                         <dialog id="modalView" className="modal">
-                            <div className="w-11/12 max-w-5xl modal-box">
-                                <div className="py-4">
-                                    <Markdown remarkPlugins={[remarkGfm]}>
-                                        {view}
-                                    </Markdown>
+                            <div className="modal-box w-full max-w-5xl p-5 bg-base-100 rounded-xl shadow-xl">
+                                {/* Header */}
+                                <div className="flex gap-2 items-center justify-between">
+                                    <h3 className="text-2xl font-bold text-center mb-6 text-base-content">
+                                        Detail Referensi Judul Penelitian
+                                    </h3>
+                                    <form method="dialog">
+                                        <button>
+                                            <IoMdCloseCircleOutline
+                                                size={30}
+                                                className="hover:text-red-500 transition-all"
+                                            />
+                                        </button>
+                                    </form>
                                 </div>
 
-                                <div className="modal-action">
-                                    <form method="dialog">
-                                        {/* if there is a button, it will close the modal */}
-                                        <button className="btn">Close</button>
-                                    </form>
+                                {/* Scrollable content area */}
+                                <div className="max-h-[70vh] overflow-y-auto pr-2 space-y-6">
+                                    {view.map((ref, index) => (
+                                        <div
+                                            key={index}
+                                            className="border rounded-xl p-6 bg-base-200 shadow-sm hover:shadow-md transition"
+                                        >
+                                            {/* Subheader */}
+                                            <div className="flex justify-between items-center mb-2 text-sm text-base-content/60">
+                                                <span className="font-medium">
+                                                    Referensi #{index + 1}
+                                                </span>
+                                            </div>
+
+                                            {/* Judul */}
+                                            <h4 className="text-lg font-semibold mb-4 text-base-content">
+                                                {ref.judul}
+                                            </h4>
+
+                                            {/* Konten */}
+                                            <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                                                <div>
+                                                    <p className="font-semibold text-base-content/70">
+                                                        Latar Belakang
+                                                    </p>
+                                                    <p className="text-base-content">
+                                                        {ref.latar_belakang}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-base-content/70">
+                                                        Tujuan Penelitian
+                                                    </p>
+                                                    <p className="text-base-content">
+                                                        {ref.tujuan_penelitian}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-base-content/70">
+                                                        Metodologi
+                                                    </p>
+                                                    <p className="text-base-content">
+                                                        {
+                                                            ref.metodologi_penelitian
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-base-content/70">
+                                                        Inovasi
+                                                    </p>
+                                                    <p className="text-base-content">
+                                                        {ref.inovasi}
+                                                    </p>
+                                                </div>
+                                                <div className="sm:col-span-2">
+                                                    <p className="font-semibold text-base-content/70">
+                                                        Keunggulan
+                                                    </p>
+                                                    <p className="text-base-content">
+                                                        {ref.keunggulan}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </dialog>

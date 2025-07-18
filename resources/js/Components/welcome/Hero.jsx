@@ -1,3 +1,5 @@
+import { Link as LinkScroll } from "react-scroll";
+
 export default function Hero() {
     return (
         <div className="hero min-h-[530px] px-4 lg:px-16">
@@ -12,9 +14,14 @@ export default function Hero() {
                         website profesional sesuai kebutuhan akademik atau
                         proyekmu. Cepat, mudah, dan sesuai standar terbaik.
                     </p>
-                    <button className="text-white bg-purple-600 shadow btn hover:bg-purple-700">
+                    <LinkScroll
+                        to="paketmagang"
+                        smooth={true}
+                        duration={400}
+                        className="text-white bg-purple-600 shadow btn hover:bg-purple-700"
+                    >
                         Pesan Sekarang
-                    </button>
+                    </LinkScroll>
                 </div>
                 <div className="md:flex md:justify-center">
                     <img

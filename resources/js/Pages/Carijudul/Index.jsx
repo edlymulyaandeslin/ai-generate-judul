@@ -3,15 +3,15 @@ import MainLayout from "@/Layouts/MainLayout";
 import { geminiRequest } from "@/utils/ai/gemini";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { LuLoader } from "react-icons/lu";
 import { toast } from "sonner";
 
 export default function Index() {
-    const [text, setText] = useState("");
+    const [referensi, setListReferensi] = useState([]);
     const { auth } = usePage().props;
     const [loading, setLoading] = useState(false);
-    const btnTitle = !text ? "Generate Judul" : "Generate Ulang";
+    const btnTitle =
+        referensi.length == 0 ? "Generate Judul" : "Generate Ulang";
 
     const { data, setData, post, errors } = useForm({
         jurusan: "",
@@ -35,7 +35,7 @@ export default function Index() {
             !data.lokasi ||
             !data.tingkat_kesulitan
         ) {
-            return toast.warning("Pastikan semua data di isi ya brother!");
+            return toast.warning("Pastikan semua data di isi ya brader!");
         }
 
         if (auth.user.credit < 10) {
@@ -44,20 +44,6 @@ export default function Index() {
 
         setLoading(true);
 
-        //jurusan = sistem informasi
-        //jenis aplikasi = sistem pakar / spk / sistem informasi
-        //berbasis = web
-        //jenis penelitian = skripsi
-        //tingkat kesulitan = medium
-        //lokasi penelitian = lokasi x
-        //prompt tambahan user = saya ingin membahas tentang xxx
-
-        // Bagian optional untuk tambahan prompt
-        let optionalText = "";
-        if (data.additional_prompt) {
-            optionalText = ` Selain itu, ${data.additional_prompt} secara mendalam.`;
-        }
-
         // Tambahan prompt khusus untuk jenis aplikasi tertentu
         let additionalMethodPrompt = "";
         const lowerJenisAplikasi = data.jenis_aplikasi.toLowerCase();
@@ -65,16 +51,40 @@ export default function Index() {
             lowerJenisAplikasi === "sistem pakar" ||
             lowerJenisAplikasi === "sistem pendukung keputusan"
         ) {
-            additionalMethodPrompt = " Sertakan juga metode sistem pakarnya.";
+            additionalMethodPrompt = ` Sertakan juga metode ${lowerJenisAplikasi}nya.`;
+        }
+
+        // Bagian optional untuk tambahan prompt
+        let optionalText = "";
+        if (data.additional_prompt) {
+            optionalText = ` Selain itu, ${data.additional_prompt} secara mendalam.`;
         }
 
         // Prompt final
-        const prompt = `Berikan saya 5 referensi judul ${data.jenis_penelitian} untuk jurusan ${data.jurusan} dengan fokus pada pengembangan ${data.jenis_aplikasi} berbasis ${data.basis}. Penelitian dilakukan di ${data.lokasi} dengan tingkat kesulitan ${data.tingkat_kesulitan}. Sertakan rincian poin penting pada setiap judul, meliputi latar belakang masalah, tujuan penelitian, metodologi, inovasi, dan keunggulan.${additionalMethodPrompt}${optionalText}`;
+        const prompt = `Saya membutuhkan 3 referensi judul penelitian ${data.jenis_penelitian} untuk jurusan ${data.jurusan}, dengan fokus pada pengembangan ${data.jenis_aplikasi} berbasis ${data.basis}. Penelitian ini dilakukan di ${data.lokasi}, dengan tingkat kesulitan ${data.tingkat_kesulitan}.
+
+        Untuk setiap judul, berikan penjelasan terstruktur yang mencakup:
+        - judul
+        - latar_belakang
+        - tujuan_penelitian
+        - metodologi_penelitian
+        - inovasi
+        - keunggulan
+
+        ${additionalMethodPrompt}${optionalText}
+
+        Tampilkan jawaban dalam format JSON array dengan key yang konsisten dan tanpa penjelasan tambahan di luar struktur JSON.`;
 
         const responseAI = await geminiRequest(prompt);
+        // const responseAI = await groqRequest(prompt);
 
-        setText(responseAI);
-        setData("ai_response", responseAI);
+        const cleaned = responseAI
+            .replace(/```json\s*|```/g, "") // Hapus ```json atau ```
+            .trim();
+        const listRef = JSON.parse(cleaned);
+
+        setListReferensi(listRef);
+        setData("ai_response", JSON.stringify(listRef));
         setLoading(false);
     };
 
@@ -82,7 +92,7 @@ export default function Index() {
         if (data.ai_response) {
             post(route("carijudul.store"));
         }
-    }, [text]);
+    }, [referensi]);
 
     return (
         <MainLayout>
@@ -97,7 +107,6 @@ export default function Index() {
                         sesuai dengan bidang Anda. Coba sekarang dan buat
                         penelitian anda lebih mudah dari sebelumnya!
                     </h1>
-
                     <form
                         onSubmit={handleAI}
                         className="grid grid-cols-1 lg:grid-cols-2"
@@ -420,7 +429,7 @@ export default function Index() {
                             <div className="w-full max-w-xs mx-auto">
                                 <input
                                     type="text"
-                                    placeholder="example: dinas kominfo"
+                                    placeholder="example: Toko gula pasir pengaraian"
                                     className="w-full max-w-xs input input-bordered"
                                     onChange={(e) =>
                                         setData("lokasi", e.target.value)
@@ -439,7 +448,7 @@ export default function Index() {
 
                             <div className="w-full max-w-md mx-auto">
                                 <textarea
-                                    placeholder="ex: saya ingin membahas x"
+                                    placeholder="ex: saya ingin membahas khusus bidang x"
                                     className="w-full textarea textarea-bordered"
                                     onChange={(e) =>
                                         setData(
@@ -453,19 +462,79 @@ export default function Index() {
 
                         <div className="flex justify-center gap-2 lg:col-span-2">
                             <button type="submit" className="btn btn-info">
-                                {loading ? "Generating..." : btnTitle}
+                                {loading ? (
+                                    <LuLoader className="animate-spin" />
+                                ) : (
+                                    btnTitle
+                                )}
                             </button>
                         </div>
                     </form>
 
-                    {text && (
-                        <div className="w-full max-w-6xl mx-auto my-8">
-                            <Markdown
-                                className="p-8 text-lg rounded bg-base-300"
-                                remarkPlugins={[remarkGfm]}
-                            >
-                                {text}
-                            </Markdown>
+                    {referensi.length !== 0 && (
+                        <div className="w-full max-w-6xl mx-auto px-4 py-10 grid gap-8">
+                            {referensi.map((ref, index) => (
+                                <div
+                                    key={index}
+                                    className="relative border rounded-xl p-6 bg-base-100 shadow-md hover:shadow-lg transition-all"
+                                >
+                                    {/* Header */}
+                                    <div className="flex justify-between items-center mb-4 text-sm text-base-content/60">
+                                        <span className="font-medium">
+                                            Referensi #{index + 1}
+                                        </span>
+                                    </div>
+
+                                    {/* Judul */}
+                                    <h2 className="text-xl font-semibold mb-4 text-base-content">
+                                        {ref.judul}
+                                    </h2>
+
+                                    {/* Konten */}
+                                    <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <p className="font-semibold text-base-content/70">
+                                                Latar Belakang
+                                            </p>
+                                            <p className="text-base-content">
+                                                {ref.latar_belakang}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-base-content/70">
+                                                Tujuan Penelitian
+                                            </p>
+                                            <p className="text-base-content">
+                                                {ref.tujuan_penelitian}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-base-content/70">
+                                                Metodologi
+                                            </p>
+                                            <p className="text-base-content">
+                                                {ref.metodologi_penelitian}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-base-content/70">
+                                                Inovasi
+                                            </p>
+                                            <p className="text-base-content">
+                                                {ref.inovasi}
+                                            </p>
+                                        </div>
+                                        <div className="sm:col-span-2">
+                                            <p className="font-semibold text-base-content/70">
+                                                Keunggulan
+                                            </p>
+                                            <p className="text-base-content">
+                                                {ref.keunggulan}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>

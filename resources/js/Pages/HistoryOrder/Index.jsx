@@ -2,22 +2,10 @@ import ContentWrapper from "@/Components/ContentWrapper";
 import MainLayout from "@/Layouts/MainLayout";
 import { formatingDate, formatingPrice, ORDER_STATUS } from "@/utils";
 import { Head } from "@inertiajs/react";
-import axios from "axios";
 import { LiaMoneyBillWaveSolid } from "react-icons/lia";
 
 export default function Index({ listOrder }) {
-    const handleRepayment = async (orderId, snapToken) => {
-        const res = await axios.get(route("midtrans.status", orderId));
-        const status = await res.data.response.transaction_status;
-        // if (status !== STATUS.PENDING) {
-        //     const formData = new FormData();
-
-        //     formData.append("order_id", orderId);
-
-        //     router.post(route("midtrans.expired"), formData);
-        //     return;
-        // }
-
+    const handleRepayment = async (snapToken) => {
         window.snap.pay(snapToken);
     };
     return (
@@ -72,13 +60,13 @@ export default function Index({ listOrder }) {
                                                 }
                                             )}
                                         </td>
+
                                         <td>
                                             {order.status == "pending" ? (
                                                 <button
                                                     className="btn btn-info md:btn-sm"
                                                     onClick={() =>
                                                         handleRepayment(
-                                                            order.order_id,
                                                             order.snap_token
                                                         )
                                                     }
@@ -94,6 +82,17 @@ export default function Index({ listOrder }) {
                                         </td>
                                     </tr>
                                 ))}
+
+                                {listOrder.length === 0 && (
+                                    <tr>
+                                        <td
+                                            colSpan="5"
+                                            className="text-center text-gray-500"
+                                        >
+                                            No orders found.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
