@@ -284,7 +284,7 @@ export default function Navbar() {
                 </div>
 
                 {/* modal add more credit */}
-                <dialog ref={modalRef} id="modalView" className="modal">
+                <dialog ref={modalRef} id="modalMoreCredit" className="modal">
                     <div className="modal-box w-full max-w-lg p-5 bg-base-100 rounded-xl shadow-xl">
                         {/* Header */}
                         <div className="flex gap-2 items-center justify-between">

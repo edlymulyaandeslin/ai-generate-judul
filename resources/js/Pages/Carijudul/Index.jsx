@@ -12,8 +12,7 @@ export default function Index() {
     const { auth } = usePage().props;
     const [loading, setLoading] = useState(false);
 
-    const btnTitle =
-        referensi.length == 0 ? "Generate Judul" : "Generate Ulang";
+    const btnTitle = referensi.length > 0 ? "Generate Judul" : "Generate Ulang";
 
     const { data, setData, post, errors } = useForm({
         jurusan: "",
@@ -465,10 +464,13 @@ export default function Index() {
                         <div className="flex justify-center gap-2 lg:col-span-2">
                             <button
                                 type="submit"
-                                className="btn btn-outline btn-accent btn-block"
+                                className="btn btn-outline btn-accent btn-block max-w-lg"
                             >
                                 {loading ? (
-                                    <LuLoader className="animate-spin" />
+                                    <LuLoader
+                                        className="animate-spin"
+                                        size={20}
+                                    />
                                 ) : (
                                     <>
                                         {btnTitle} (10
@@ -483,9 +485,9 @@ export default function Index() {
                         </div>
                     </form>
 
-                    {referensi.length !== 0 && (
+                    {referensi.length > 0 && !loading && (
                         <div className="w-full max-w-6xl mx-auto px-4 py-10 grid gap-8">
-                            {referensi.map((ref, index) => (
+                            {referensi?.map((ref, index) => (
                                 <div
                                     key={index}
                                     className="relative border rounded-xl p-6 bg-base-100 shadow-md hover:shadow-lg transition-all"
@@ -499,7 +501,7 @@ export default function Index() {
 
                                     {/* Judul */}
                                     <h2 className="text-xl font-semibold mb-4 text-base-content">
-                                        {ref.judul}
+                                        {ref?.judul}
                                     </h2>
 
                                     {/* Konten */}
@@ -509,7 +511,7 @@ export default function Index() {
                                                 Latar Belakang
                                             </p>
                                             <p className="text-base-content">
-                                                {ref.latar_belakang}
+                                                {ref?.latar_belakang}
                                             </p>
                                         </div>
                                         <div>
@@ -517,7 +519,7 @@ export default function Index() {
                                                 Tujuan Penelitian
                                             </p>
                                             <p className="text-base-content">
-                                                {ref.tujuan_penelitian}
+                                                {ref?.tujuan_penelitian}
                                             </p>
                                         </div>
                                         <div>
@@ -525,7 +527,7 @@ export default function Index() {
                                                 Metodologi
                                             </p>
                                             <p className="text-base-content">
-                                                {ref.metodologi_penelitian}
+                                                {ref?.metodologi_penelitian}
                                             </p>
                                         </div>
                                         <div>
@@ -533,7 +535,7 @@ export default function Index() {
                                                 Inovasi
                                             </p>
                                             <p className="text-base-content">
-                                                {ref.inovasi}
+                                                {ref?.inovasi}
                                             </p>
                                         </div>
                                         <div className="sm:col-span-2">
@@ -541,7 +543,7 @@ export default function Index() {
                                                 Keunggulan
                                             </p>
                                             <p className="text-base-content">
-                                                {ref.keunggulan}
+                                                {ref?.keunggulan}
                                             </p>
                                         </div>
                                     </div>
