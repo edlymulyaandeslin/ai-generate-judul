@@ -3,6 +3,7 @@ import MainLayout from "@/Layouts/MainLayout";
 import { geminiRequest } from "@/utils/ai/gemini";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import { FaCoins } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
 import { toast } from "sonner";
 
@@ -10,6 +11,7 @@ export default function Index() {
     const [referensi, setListReferensi] = useState([]);
     const { auth } = usePage().props;
     const [loading, setLoading] = useState(false);
+
     const btnTitle =
         referensi.length == 0 ? "Generate Judul" : "Generate Ulang";
 
@@ -461,11 +463,21 @@ export default function Index() {
                         </div>
 
                         <div className="flex justify-center gap-2 lg:col-span-2">
-                            <button type="submit" className="btn btn-info">
+                            <button
+                                type="submit"
+                                className="btn btn-outline btn-accent btn-block"
+                            >
                                 {loading ? (
                                     <LuLoader className="animate-spin" />
                                 ) : (
-                                    btnTitle
+                                    <>
+                                        {btnTitle} (10
+                                        <FaCoins
+                                            size={13}
+                                            className="text-yellow-400"
+                                        />
+                                        )
+                                    </>
                                 )}
                             </button>
                         </div>

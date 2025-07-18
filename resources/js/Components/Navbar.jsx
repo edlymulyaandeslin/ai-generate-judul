@@ -1,14 +1,34 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
+import { useRef } from "react";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { FaCoins, FaHistory } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoMdCloseCircleOutline } from "react-icons/io";
 import { LuSparkles } from "react-icons/lu";
 import { Link as LinkScroll } from "react-scroll";
 
 export default function Navbar() {
     const { auth } = usePage().props;
+    const modalRef = useRef();
+
+    const { data, setData, post, processing } = useForm({
+        credit: "",
+    });
+
+    const handleAddCredit = (e) => {
+        e.preventDefault();
+
+        post(route("credits.add"), {
+            onSuccess: () => {
+                // Reset form
+                setData("credit", "");
+                // Tutup modal setelah sukses
+                modalRef.current.close();
+            },
+        });
+    };
+
     return (
         <div className="sticky top-0 z-50 border-b-2 border-gray-700 shadow bg-opacity-80 navbar bg-base-300">
             <div className="flex justify-between w-full">
@@ -122,11 +142,57 @@ export default function Navbar() {
                                     </li>
 
                                     {auth.user ? (
-                                        <li>
-                                            <Link href={route("login")}>
-                                                Dashboard
-                                            </Link>
-                                        </li>
+                                        <>
+                                            <li>
+                                                <Link href={route("login")}>
+                                                    Dashboard
+                                                </Link>
+                                            </li>
+                                            {auth.user.is_admin && (
+                                                <li>
+                                                    <button
+                                                        onClick={() =>
+                                                            modalRef.current?.showModal()
+                                                        }
+                                                    >
+                                                        <FaCoins size={12} />
+                                                        Tambah Credit
+                                                    </button>
+                                                </li>
+                                            )}
+                                            <li>
+                                                <Link
+                                                    href={route(
+                                                        "history.judul"
+                                                    )}
+                                                >
+                                                    <FaHistory size={12} />
+                                                    History Judul
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={route(
+                                                        "history.order"
+                                                    )}
+                                                >
+                                                    <HiOutlineShoppingBag
+                                                        size={16}
+                                                    />
+                                                    History Order
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    href={route("logout")}
+                                                    method="post"
+                                                    as="button"
+                                                >
+                                                    <BsBoxArrowLeft size={15} />
+                                                    Logout
+                                                </Link>
+                                            </li>
+                                        </>
                                     ) : (
                                         <li>
                                             <Link href={route("login")}>
@@ -167,6 +233,18 @@ export default function Navbar() {
                                         tabIndex={0}
                                         className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-52 p-2 shadow"
                                     >
+                                        {auth.user.is_admin && (
+                                            <li>
+                                                <button
+                                                    onClick={() =>
+                                                        modalRef.current?.showModal()
+                                                    }
+                                                >
+                                                    <FaCoins size={12} />
+                                                    Tambah Credit
+                                                </button>
+                                            </li>
+                                        )}
                                         <li>
                                             <Link href={route("history.judul")}>
                                                 <FaHistory size={12} />
@@ -204,6 +282,47 @@ export default function Navbar() {
                         </Link>
                     )}
                 </div>
+
+                {/* modal add more credit */}
+                <dialog ref={modalRef} id="modalView" className="modal">
+                    <div className="modal-box w-full max-w-lg p-5 bg-base-100 rounded-xl shadow-xl">
+                        {/* Header */}
+                        <div className="flex gap-2 items-center justify-between">
+                            <h3 className="text-2xl font-bold text-center mb-6 text-base-content">
+                                Your Credit : {auth.user.credit}
+                            </h3>
+                            <form method="dialog">
+                                <button>
+                                    <IoMdCloseCircleOutline
+                                        size={30}
+                                        className="hover:text-red-500 transition-all"
+                                    />
+                                </button>
+                            </form>
+                        </div>
+
+                        <form
+                            onSubmit={handleAddCredit}
+                            className="flex gap-2 flex-wrap justify-center"
+                        >
+                            <input
+                                type="number"
+                                value={data.credit}
+                                placeholder="Masukkan credit"
+                                className="w-full max-w-xs input input-bordered"
+                                onChange={(e) =>
+                                    setData("credit", e.target.value)
+                                }
+                                required
+                            />
+                            <button type="submit" className="btn btn-success">
+                                {processing
+                                    ? "Menambahkan..."
+                                    : "Tambah Credit"}
+                            </button>
+                        </form>
+                    </div>
+                </dialog>
             </div>
         </div>
     );

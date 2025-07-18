@@ -22,6 +22,7 @@ Route::middleware("auth")->group(function () {
     // Credit routing
     Route::get("/credits", [CreditController::class, "index"])->name('credits.index');
     Route::get("/credits/notenought", [CreditController::class, "notenought"])->name('credits.notenought');
+    Route::post("/credits", [CreditController::class, "addMoreCredit"])->name('credits.add');
 
     // Midtrans routing
     Route::post("/midtrans/snaptoken/{credit}", [MidtransController::class, "getSnaptoken"])->name("midtrans.snaptoken");
