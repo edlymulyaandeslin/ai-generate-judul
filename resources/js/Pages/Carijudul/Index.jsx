@@ -68,9 +68,9 @@ export default function Index() {
         - judul
         - latar_belakang
         - tujuan_penelitian
-        - metodologi_penelitian
+        - metodologi_penelitian [array]
         - inovasi
-        - keunggulan
+        - keunggulan [array]
 
         ${additionalMethodPrompt}${optionalText}
 
@@ -83,6 +83,7 @@ export default function Index() {
             .replace(/```json\s*|```/g, "") // Hapus ```json atau ```
             .trim();
         const listRef = JSON.parse(cleaned);
+        console.log(listRef);
 
         setListReferensi(listRef);
         setData("ai_response", JSON.stringify(listRef));
@@ -524,11 +525,18 @@ export default function Index() {
                                         </div>
                                         <div>
                                             <p className="font-semibold text-base-content/70">
-                                                Metodologi
+                                                Metodologi Penelitian
                                             </p>
-                                            <p className="text-base-content">
-                                                {ref?.metodologi_penelitian}
-                                            </p>
+                                            {ref?.metodologi_penelitian.map(
+                                                (mp, index) => (
+                                                    <p
+                                                        key={index}
+                                                        className="text-base-content text-justify"
+                                                    >
+                                                        {index + 1}. {mp}
+                                                    </p>
+                                                )
+                                            )}
                                         </div>
                                         <div>
                                             <p className="font-semibold text-base-content/70">
@@ -542,9 +550,14 @@ export default function Index() {
                                             <p className="font-semibold text-base-content/70">
                                                 Keunggulan
                                             </p>
-                                            <p className="text-base-content">
-                                                {ref?.keunggulan}
-                                            </p>
+                                            {ref?.keunggulan.map((k, index) => (
+                                                <p
+                                                    key={index}
+                                                    className="text-base-content text-justify"
+                                                >
+                                                    {index + 1}. {k}
+                                                </p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
