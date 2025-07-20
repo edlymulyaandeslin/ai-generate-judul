@@ -108,32 +108,37 @@ class MidtransController extends Controller
                 $user->credit += $creditOrder->jumlah_credit;
                 $user->save();
 
-                return redirect()->away("http://localhost:8000/payment/$orderId/success");
+                // return redirect()->away("http://localhost:8000/payment/$orderId/success");
+                return redirect("/payment/$orderId/success");
             } else if ($transaction_status == "pending") {
                 $creditOrder->status = CreditOrder::PENDING;
                 $creditOrder->save();
 
                 session()->flash("warning", "Top up is pending!");
 
-                return redirect()->away("http://localhost:8000/history-order");
+                // return redirect()->away("http://localhost:8000/history-order");
+                return redirect("/history-order");
             } else if ($transaction_status == "expire") {
                 $creditOrder->status = CreditOrder::EXPIRED;
                 $creditOrder->save();
 
                 session()->flash("error", "Top up expired!");
 
-                return redirect()->away("http://localhost:8000/history-order");
+                // return redirect()->away("http://localhost:8000/history-order");
+                return redirect("/history-order");
             } else {
                 $creditOrder->status = CreditOrder::FAILED;
                 $creditOrder->save();
 
                 session()->flash("error", "Top up failed!");
 
-                return redirect()->away("http://localhost:8000/credits");
+                // return redirect()->away("http://localhost:8000/credits");
+                return redirect("/credits");
             }
         } catch (\Exception $e) {
             dd("masuk ke exception");
-            return redirect()->away("http://localhost:8000/credits")->with("error", $e->getMessage());
+            // return redirect()->away("http://localhost:8000/credits")->with("error", $e->getMessage());
+            return redirect("/credits")->with("error", $e->getMessage());
         }
     }
 }
