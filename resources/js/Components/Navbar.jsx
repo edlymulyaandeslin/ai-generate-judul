@@ -289,7 +289,7 @@ export default function Navbar() {
                         {/* Header */}
                         <div className="flex gap-2 items-center justify-between">
                             <h3 className="text-2xl font-bold text-center mb-6 text-base-content">
-                                Your Credit : {auth.user.credit}
+                                Your Credit : {auth.user?.credit}
                             </h3>
                             <form method="dialog">
                                 <button>
