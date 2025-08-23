@@ -44,7 +44,6 @@ export default function Index({ listJudul }) {
                                     <th>Jurusan</th>
                                     <th>Jenis Penelitian</th>
                                     <th>Lokasi Penelitian</th>
-                                    <th>Tingkat Kesulitan</th>
                                     <th>AI Response</th>
                                     <th>Action</th>
                                 </tr>
@@ -58,21 +57,7 @@ export default function Index({ listJudul }) {
                                         <td>{judul.jurusan}</td>
                                         <td>{judul.jenis_penelitian}</td>
                                         <td>{judul.lokasi}</td>
-                                        <td>
-                                            <span
-                                                className={`badge ${
-                                                    judul.tingkat_kesulitan ===
-                                                    "mudah"
-                                                        ? "badge-success"
-                                                        : judul.tingkat_kesulitan ===
-                                                          "menengah"
-                                                        ? "badge-warning"
-                                                        : "badge-error"
-                                                }`}
-                                            >
-                                                {judul.tingkat_kesulitan}
-                                            </span>
-                                        </td>
+
                                         <td>
                                             <button
                                                 href="google.com"
@@ -96,6 +81,14 @@ export default function Index({ listJudul }) {
                                         </td>
                                     </tr>
                                 ))}
+
+                                {listJudul.length === 0 && (
+                                    <tr>
+                                        <td colSpan={5} className="text-center">
+                                            No data available.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
 

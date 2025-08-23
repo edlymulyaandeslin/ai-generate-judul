@@ -4,7 +4,7 @@ import bg6 from "../../../public/img/bg/bg-6.jpeg";
 export const PAKET_MAGANG = [
     {
         title: "Laporan",
-        price: 800000,
+        price: 700000,
         description:
             "Pengerjaan full bab 1 - 7\nFree konsultasi\nFree revisi laporan 2x",
         bg: bg3,
@@ -27,21 +27,21 @@ export const PAKET_MAGANG = [
 export const PAKET_SKRIPSI = [
     {
         title: "Laporan",
-        price: 1000000,
+        price: 950000,
         description:
             "Pengerjaan full bab 1 - 6\nFree konsultasi\nFree revisi laporan 2x",
         bg: bg3,
     },
     {
         title: "Aplikasi",
-        price: 3500000,
+        price: 3000000,
         description:
             "Pengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi 2x",
         bg: bg3,
     },
     {
         title: "Laporan + Aplikasi",
-        price: 4000000,
+        price: 3500000,
         description:
             "Pengerjaan full bab 1 - 6\nPengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi\nFree revisi laporan",
         bg: bg6,
