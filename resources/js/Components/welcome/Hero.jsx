@@ -18,7 +18,7 @@ export default function Hero() {
                         to="paketmagang"
                         smooth={true}
                         duration={400}
-                        className="text-white bg-purple-600 shadow btn hover:bg-purple-700"
+                        className="text-white bg-blue-600 shadow btn hover:bg-blue-700"
                     >
                         Pesan Sekarang
                     </LinkScroll>

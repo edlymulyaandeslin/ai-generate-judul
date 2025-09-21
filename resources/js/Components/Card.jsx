@@ -18,7 +18,10 @@ export default function Card({ paket, isMagang = false }) {
                     <h2 className="w-full text-center border-b-2 border-green-500">
                         {paket.title}
                     </h2>
-                    <span>{formatingPrice(paket.price)}</span>
+                    <span>
+                        {formatingPrice(paket.price)}
+                        {paket.title === "Laporan" && "/Bab"}
+                    </span>
                 </div>
                 <div className="w-full max-w-xs mx-auto">
                     <ul className="list-disc">

@@ -19,18 +19,10 @@ Route::middleware("auth")->group(function () {
     Route::get("/cari-judul-with-ai", [AIController::class, "index"])->name('carijudul');
     Route::post("/cari-judul-with-ai", [AIController::class, "store"])->name('carijudul.store');
 
-    // Credit routing
-    Route::get("/credits", [CreditController::class, "index"])->name('credits.index');
-    Route::get("/credits/notenought", [CreditController::class, "notenought"])->name('credits.notenought');
-    Route::post("/credits", [CreditController::class, "addMoreCredit"])->name('credits.add');
-
     // Midtrans routing
     Route::post("/midtrans/snaptoken/{credit}", [MidtransController::class, "getSnaptoken"])->name("midtrans.snaptoken");
     Route::get("/midtrans/{orderId}/status", [MidtransController::class, "getOrderStatus"])->name("midtrans.status");
     Route::delete("/midtrans/cancel", [MidtransController::class, "deleteLatestOrder"])->name("midtrans.cancel");
-
-    // History Order routing
-    Route::get("/history-order", [HistoryOrderController::class, "index"])->name("history.order");
 
     // History Judul routing
     Route::get("/history-judul", [HistoryJudulController::class, "index"])->name("history.judul");

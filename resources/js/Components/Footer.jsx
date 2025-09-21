@@ -33,13 +33,13 @@ export default function Footer() {
             <nav>
                 <div className="grid grid-flow-col gap-4">
                     <a
-                        href="https://www.instagram.com/__elyynn/"
+                        href="https://www.instagram.com/__elyynn"
                         target="_blank"
                     >
                         <FaInstagram size={24} className="text-pink-600" />
                     </a>
                     <a
-                        href="https://www.linkedin.com/in/edly-mulya-andeslin-79a52326b/"
+                        href="https://www.linkedin.com/in/edly-mulya-andeslin"
                         target="_blank"
                     >
                         <FaLinkedin size={24} className="text-blue-600" />

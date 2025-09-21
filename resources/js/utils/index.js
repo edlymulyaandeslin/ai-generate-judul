@@ -4,46 +4,44 @@ import bg6 from "../../../public/img/bg/bg-6.jpeg";
 export const PAKET_MAGANG = [
     {
         title: "Laporan",
-        price: 700000,
-        description:
-            "Pengerjaan full bab 1 - 7\nFree konsultasi\nFree revisi laporan 2x",
+        price: 150000,
+        description: "Pengerjaan laporan\nFree konsultasi\nFree revisi laporan",
         bg: bg3,
     },
     {
         title: "Aplikasi",
         price: 1000000,
         description:
-            "Pengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi 2x",
+            "Pengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi",
         bg: bg3,
     },
     {
         title: "Laporan + Aplikasi",
         price: 1500000,
         description:
-            "Pengerjaan full bab 1 - 7\nPengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi\nFree revisi laporan",
+            "Pengerjaan laporan full bab\nPengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi\nFree revisi laporan",
         bg: bg6,
     },
 ];
 export const PAKET_SKRIPSI = [
     {
         title: "Laporan",
-        price: 950000,
-        description:
-            "Pengerjaan full bab 1 - 6\nFree konsultasi\nFree revisi laporan 2x",
+        price: 200000,
+        description: "Pengerjaan laporan\nFree konsultasi\nFree revisi laporan",
         bg: bg3,
     },
     {
         title: "Aplikasi",
         price: 3000000,
         description:
-            "Pengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi 2x",
+            "Pengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi",
         bg: bg3,
     },
     {
         title: "Laporan + Aplikasi",
         price: 3500000,
         description:
-            "Pengerjaan full bab 1 - 6\nPengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi\nFree revisi laporan",
+            "Pengerjaan laporan full bab\nPengerjaan aplikasi\nFree konsultasi\nFree revisi aplikasi\nFree revisi laporan",
         bg: bg6,
     },
 ];
@@ -71,23 +69,3 @@ export const formatingDate = (date) => {
         ` ${hour}:${minute}:${second}`
     );
 };
-
-export const STATUS = window.CreditOrderStats;
-
-export const ORDER_STATUS = [
-    {
-        label: "Success",
-        value: STATUS.SUCCESS,
-        class: "badge-success",
-    },
-    {
-        label: "Pending",
-        value: STATUS.PENDING,
-        class: "badge-warning",
-    },
-    {
-        label: "Expired",
-        value: STATUS.EXPIRED,
-        class: "badge-error",
-    },
-];

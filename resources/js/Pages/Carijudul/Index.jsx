@@ -1,7 +1,7 @@
 import ContentWrapper from "@/Components/ContentWrapper";
 import MainLayout from "@/Layouts/MainLayout";
 import { geminiRequest } from "@/utils/ai/gemini";
-import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { LuLoader } from "react-icons/lu";
 import { toast } from "sonner";
@@ -26,10 +26,6 @@ export default function Index() {
     const handleAI = async (e) => {
         e.preventDefault();
 
-        if (!auth.user) {
-            return router.get(route("login"));
-        }
-
         if (
             !data.jurusan ||
             !data.jenis_penelitian ||
@@ -37,10 +33,6 @@ export default function Index() {
             !data.lokasi
         ) {
             return toast.warning("Pastikan semua data di isi ya brader!");
-        }
-
-        if (auth.user.credit < 10) {
-            return router.get(route("credits.notenought"));
         }
 
         setLoading(true);
@@ -379,86 +371,6 @@ export default function Index() {
                             </div>
                         </div>
 
-                        {/* Tingkat Kesulitan */}
-                        {/* <div className="my-4">
-                            <h1 className="mb-4 text-lg font-bold text-center">
-                                Tingkat Kesulitan
-                            </h1>
-                            <div className="flex justify-center gap-4">
-                                <label
-                                    htmlFor="mudah"
-                                    className={`btn ${
-                                        data.tingkat_kesulitan == "mudah"
-                                            ? "btn-success"
-                                            : ""
-                                    }`}
-                                >
-                                    <input
-                                        id="mudah"
-                                        type="radio"
-                                        name="tingkat_kesulitan"
-                                        value={"mudah"}
-                                        className="hidden"
-                                        onChange={(e) =>
-                                            setData(
-                                                "tingkat_kesulitan",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    Mudah
-                                </label>
-
-                                <label
-                                    htmlFor="menengah"
-                                    className={`btn ${
-                                        data.tingkat_kesulitan == "menengah"
-                                            ? "btn-warning"
-                                            : ""
-                                    }`}
-                                >
-                                    <input
-                                        id="menengah"
-                                        type="radio"
-                                        name="tingkat_kesulitan"
-                                        value={"menengah"}
-                                        className="hidden"
-                                        onChange={(e) =>
-                                            setData(
-                                                "tingkat_kesulitan",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    Menengah
-                                </label>
-
-                                <label
-                                    htmlFor="sulit"
-                                    className={`btn ${
-                                        data.tingkat_kesulitan == "sulit"
-                                            ? "btn-error"
-                                            : ""
-                                    }`}
-                                >
-                                    <input
-                                        id="sulit"
-                                        type="radio"
-                                        name="tingkat_kesulitan"
-                                        value={"sulit"}
-                                        className="hidden"
-                                        onChange={(e) =>
-                                            setData(
-                                                "tingkat_kesulitan",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    Sulit
-                                </label>
-                            </div>
-                        </div> */}
-
                         {/* Lokasi Penelitian */}
                         <div className="my-4">
                             <h1 className="mb-4 text-lg font-bold text-center">
@@ -468,7 +380,7 @@ export default function Index() {
                             <div className="w-full max-w-xs mx-auto">
                                 <input
                                     type="text"
-                                    placeholder="example: Toko gula pasir pengaraian"
+                                    placeholder="example: Dinas Kominfo Riau"
                                     className="w-full max-w-xs input input-bordered"
                                     onChange={(e) =>
                                         setData("lokasi", e.target.value)
@@ -504,7 +416,7 @@ export default function Index() {
                         <div className="flex justify-center gap-2 lg:col-span-2">
                             <button
                                 type="submit"
-                                className="btn btn-primary btn-block max-w-lg"
+                                className="btn bg-blue-600 text-white hover:bg-blue-700 btn-block max-w-lg"
                             >
                                 {loading ? (
                                     <LuLoader
@@ -523,7 +435,7 @@ export default function Index() {
                             {referensi?.map((ref, index) => (
                                 <div
                                     key={index}
-                                    className="relative border rounded-xl p-6 bg-base-100 shadow-md hover:shadow-lg transition-all"
+                                    className="relative border border-blue-900 rounded-xl p-6 bg-base-100 shadow-md hover:shadow-lg transition-all"
                                 >
                                     {/* Header */}
                                     <div className="flex justify-between items-center mb-4 text-sm text-base-content/60">

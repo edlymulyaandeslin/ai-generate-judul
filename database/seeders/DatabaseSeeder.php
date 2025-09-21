@@ -15,14 +15,10 @@ class DatabaseSeeder extends Seeder
     {
 
         User::factory()->create([
-            "name" => "Edly Mulya Andeslin",
+            "name" => "Super Silent",
             "email" => "super@gmail.com",
             "password" => bcrypt("password"),
-            "is_admin" => true
-        ]);
-
-        $this->call([
-            CreditSeeder::class
+            "is_premium" => true
         ]);
     }
 }

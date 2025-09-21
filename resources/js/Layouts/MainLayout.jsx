@@ -20,7 +20,7 @@ export default function MainLayout({ children }) {
     }, [flash]);
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-br from-base-200 to-purple-800">
+        <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
             <Navbar />
 
             <main>{children}</main>
