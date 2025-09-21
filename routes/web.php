@@ -34,18 +34,4 @@ Route::middleware("auth")->group(function () {
 Route::get("/payment/webhook", [MidtransController::class, "webhook"])->name("midtrans.webhook");
 
 
-// Page payment success
-Route::get("/payment/{orderId}/success", function ($orderId) {
-    $order = CreditOrder::where("order_id", $orderId)->first();
-
-    if (!$order) {
-        return redirect()->route("home")->with("error", "Order not found!");
-    }
-
-    return Inertia::render("PaymentSuccess", [
-        "orderId" => $orderId
-    ]);
-})->name("payment.success");
-
-
 require __DIR__ . '/auth.php';

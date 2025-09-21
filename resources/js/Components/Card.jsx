@@ -5,7 +5,7 @@ export default function Card({ paket, isMagang = false }) {
     const title = isMagang ? "MAGANG" : "SKRIPSI";
     return (
         <div
-            className="shadow-xl md:w-[500px] sm:w-[400px] w-[300px] h-auto card bg-base-100"
+            className="shadow-xl md:w-[500px] w-[400px] h-auto card bg-base-100"
             style={{
                 backgroundImage: `url("${paket.bg}")`,
                 backgroundSize: "cover",
