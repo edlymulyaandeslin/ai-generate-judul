@@ -1,5 +1,4 @@
 import { Link, usePage } from "@inertiajs/react";
-import { useRef } from "react";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { FaHistory } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -9,7 +8,6 @@ import { Link as LinkScroll } from "react-scroll";
 
 export default function Navbar() {
     const { auth } = usePage().props;
-    const modalRef = useRef();
 
     return (
         <div className="sticky top-0 z-50 border-b border-blue-900 shadow bg-opacity-80 navbar bg-base-300">
@@ -163,17 +161,20 @@ export default function Navbar() {
 
                     {auth.user ? (
                         <div className="flex items-center gap-4">
-                            <Link
-                                href={"#"}
-                                className="flex items-center gap-2"
-                            >
+                            {Boolean(auth.user.is_premium) == true ? (
                                 <span className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-400 to-blue-600 px-3 py-1 font-semibold text-white shadow-sm">
                                     PRO
                                 </span>
-                                {/* <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 font-semibold text-gray-700 shadow-sm dark:bg-gray-700 dark:text-gray-200">
-                                    Free (Upgrade PRO)
-                                </span> */}
-                            </Link>
+                            ) : (
+                                <Link
+                                    href={route("upgrade")}
+                                    className="flex items-center gap-2"
+                                >
+                                    <span className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 font-semibold text-gray-700 shadow-sm dark:bg-gray-700 dark:text-gray-200">
+                                        Free (Upgrade PRO)
+                                    </span>
+                                </Link>
+                            )}
                             <div className="hidden md:block">
                                 <div className="dropdown dropdown-end">
                                     <div

@@ -26,9 +26,9 @@ export default function Login({ status, canResetPassword }) {
             <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-white to-sky-100 dark:from-gray-900 dark:to-gray-800">
                 <div className="w-full max-w-md p-8 bg-white shadow-2xl rounded-2xl dark:bg-gray-900 relative">
                     {/* Logo Text / Back to Home */}
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center mb-4">
                         <Link href={route("home")}>
-                            <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition">
+                            <span className="text-3xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition">
                                 SUPERWEB
                             </span>
                         </Link>

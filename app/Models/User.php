@@ -43,6 +43,18 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'premium_expired' => 'datetime',
         ];
+    }
+
+    public function getIsPremiumAttribute($value)
+    {
+        // Kalau masih aktif, return true
+        if ($value && $this->premium_expired && $this->premium_expired->isFuture()) {
+            return true;
+        }
+
+        // Kalau expired, dianggap false
+        return false;
     }
 }

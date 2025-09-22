@@ -137,10 +137,11 @@ export default function Register() {
                             </Link>
 
                             <Button
+                                type="submit"
                                 className="py-2 px-6 text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 transition"
                                 disabled={processing}
                             >
-                                Register
+                                {processing ? "Registering..." : "Register"}
                             </Button>
                         </div>
                     </form>

@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             "name" => "Super Silent",
             "email" => "super@gmail.com",
             "password" => bcrypt("password"),
-            "is_premium" => true
+            "is_premium" => true,
+            'premium_expired' => now()->addYears(10),
         ]);
     }
 }

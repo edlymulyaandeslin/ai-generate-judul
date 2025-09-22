@@ -12,60 +12,37 @@ use Illuminate\Support\Facades\Auth;
 
 class MidtransController extends Controller
 {
-    // public function getSnapToken(Credit $credit)
-    // {
-    //     try {
-    //         $orderId = "ORDC" . $credit->id . "-" . now()->year . now()->month . now()->day . rand(1000, 9999);
-
-    //         $params = array(
-    //             'transaction_details' => [
-    //                 'order_id' => $orderId,
-    //                 'gross_amount' => $credit->price,
-    //             ],
-    //             'customer_details' => [
-    //                 'first_name' => Auth::user()->name,
-    //                 'email' => Auth::user()->email,
-    //             ],
-    //             "item_details" => [
-    //                 [
-    //                     "id" => $credit->id,
-    //                     "price" => round($credit->price / $credit->credit),
-    //                     "quantity" => $credit->credit,
-    //                     "name" => "Credit " . $credit->title
-    //                 ]
-    //             ]
-    //         );
-
-    //         $snap_token = \Midtrans\Snap::getSnapToken($params);
-
-    //         Auth::user()->credit_orders()->create([
-    //             "order_id" => $orderId,
-    //             "jumlah_credit" => $credit->credit,
-    //             "price" => $credit->price,
-    //             "snap_token" => $snap_token,
-    //             "status" => ""
-    //         ]);
-
-    //         return response()->json([
-    //             "success" => true,
-    //             "snap_token" => $snap_token,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             "success" => false,
-    //             "message" => $e->getMessage()
-    //         ]);
-    //     }
-    // }
-
-    public function getOrderStatus($orderId)
+    public function getSnapToken()
     {
         try {
-            $status = \Midtrans\Transaction::status($orderId);
+            $orderId = "ORD-"  . now()->year . now()->month . now()->day . rand(1000, 9999);
+
+            $price_pro_plan = 49000;
+
+            $params = array(
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => $price_pro_plan,
+                ],
+                'customer_details' => [
+                    'first_name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
+                ],
+                "item_details" => [
+                    [
+                        'id' => 'PRO-PLAN-1BULAN',
+                        "price" => $price_pro_plan,
+                        "quantity" => 1,
+                        "name" => "Pro Plan - 1 Bulan"
+                    ]
+                ]
+            );
+
+            $snap_token = \Midtrans\Snap::getSnapToken($params);
 
             return response()->json([
                 "success" => true,
-                "response" => $status
+                "snap_token" => $snap_token,
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -75,58 +52,25 @@ class MidtransController extends Controller
         }
     }
 
-    public function deleteLatestOrder()
-    {
-        // CreditOrder::where("status", "")->delete();
-    }
-
     public function webhook(Request $request)
     {
-        // try {
-        //     $transaction_status = $request->transaction_status;
-        //     $orderId = $request->order_id;
-        //     $creditOrder = CreditOrder::where("order_id", $orderId)->first();
+        $result = $request->all();
+        $status_code = $result['status_code'];
+        $transaction_status = $result['transaction_status'];
+        $success = false;
 
-        //     $user = User::find($creditOrder->user_id);
+        if ($status_code == 200 && ($transaction_status == 'capture' || $transaction_status == 'settlement')) {
+            $user = Auth::user();
+            $user->is_premium = true;
+            $user->premium_expired = now()->addMonth();
+            $user->save();
 
-        //     if ($transaction_status == "settlement") {
-        //         $creditOrder->status = CreditOrder::SUCCESS;
-        //         $creditOrder->save();
+            $success = true;
+        }
 
-        //         $user->credit += $creditOrder->jumlah_credit;
-        //         $user->save();
-
-        //         // return redirect()->away("http://localhost:8000/payment/$orderId/success");
-        //         return redirect("/payment/$orderId/success");
-        //     } else if ($transaction_status == "pending") {
-        //         $creditOrder->status = CreditOrder::PENDING;
-        //         $creditOrder->save();
-
-        //         session()->flash("warning", "Top up is pending!");
-
-        //         // return redirect()->away("http://localhost:8000/history-order");
-        //         return redirect("/history-order");
-        //     } else if ($transaction_status == "expire") {
-        //         $creditOrder->status = CreditOrder::EXPIRED;
-        //         $creditOrder->save();
-
-        //         session()->flash("error", "Top up expired!");
-
-        //         // return redirect()->away("http://localhost:8000/history-order");
-        //         return redirect("/history-order");
-        //     } else {
-        //         $creditOrder->status = CreditOrder::FAILED;
-        //         $creditOrder->save();
-
-        //         session()->flash("error", "Top up failed!");
-
-        //         // return redirect()->away("http://localhost:8000/credits");
-        //         return redirect("/credits");
-        //     }
-        // } catch (\Exception $e) {
-        //     dd("masuk ke exception");
-        //     // return redirect()->away("http://localhost:8000/credits")->with("error", $e->getMessage());
-        //     return redirect("/credits")->with("error", $e->getMessage());
-        // }
+        return response()->json([
+            'success' => $success,
+            'transaction_status' => $transaction_status
+        ]);
     }
 }
