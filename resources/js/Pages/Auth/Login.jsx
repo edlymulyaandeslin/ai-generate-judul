@@ -29,7 +29,7 @@ export default function Login({ status, canResetPassword }) {
                     <div className="flex justify-center mb-4">
                         <Link
                             href="/"
-                            className="text-3xl font-extrabold tracking-tight bg-gradient-to-r md:ml-8 from-indigo-600 via-sky-500 to-blue-600 bg-clip-text text-transparent"
+                            className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-sky-500 to-blue-600 bg-clip-text text-transparent"
                         >
                             Lyn
                             <span className="text-gray-800 dark:text-gray-200">
