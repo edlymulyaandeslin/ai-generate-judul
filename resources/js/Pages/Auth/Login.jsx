@@ -27,9 +27,13 @@ export default function Login({ status, canResetPassword }) {
                 <div className="w-full max-w-md p-8 bg-white shadow-2xl rounded-2xl dark:bg-gray-900 relative">
                     {/* Logo Text / Back to Home */}
                     <div className="flex justify-center mb-4">
-                        <Link href={route("home")}>
-                            <span className="text-3xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition">
-                                SUPERWEB
+                        <Link
+                            href="/"
+                            className="text-3xl font-extrabold tracking-tight bg-gradient-to-r md:ml-8 from-indigo-600 via-sky-500 to-blue-600 bg-clip-text text-transparent"
+                        >
+                            Lyn
+                            <span className="text-gray-800 dark:text-gray-200">
+                                Joki
                             </span>
                         </Link>
                     </div>
