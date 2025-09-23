@@ -12,8 +12,14 @@ export default function Navbar() {
     return (
         <div className="sticky top-0 z-50 border-b border-blue-900 shadow bg-opacity-80 navbar bg-base-300">
             <div className="flex justify-between w-full">
-                <Link href="/" className="text-xl btn btn-ghost">
-                    SUPERWEB
+                <Link
+                    href="/"
+                    className="text-3xl font-extrabold tracking-tight bg-gradient-to-r md:ml-8 from-indigo-600 via-sky-500 to-blue-600 bg-clip-text text-transparent"
+                >
+                    Lyn
+                    <span className="text-gray-800 dark:text-gray-200">
+                        Joki
+                    </span>
                 </Link>
 
                 <div>
