@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import { LuLoader } from "react-icons/lu";
 import { toast } from "sonner";
 
-export default function Index() {
+export default function Index({ jumlah_judul }) {
     const [referensi, setListReferensi] = useState([]);
     const { auth } = usePage().props;
     const [loading, setLoading] = useState(false);
     const btnTitle = referensi.length > 0 ? "Generate Ulang" : "Generate Judul";
 
-    const { data, setData, post, errors } = useForm({
+    const { data, setData, post } = useForm({
         jurusan: "",
         jenis_penelitian: "",
         lokasi: "",
@@ -25,6 +25,12 @@ export default function Index() {
 
     const handleAI = async (e) => {
         e.preventDefault();
+
+        if (!Boolean(auth.user.is_premium) && jumlah_judul > 0) {
+            return toast.error(
+                "You must be a premium user to access this feature."
+            );
+        }
 
         if (
             !data.jurusan ||
@@ -381,7 +387,7 @@ export default function Index() {
                                 <input
                                     type="text"
                                     placeholder="example: Dinas Kominfo Riau"
-                                    className="w-full max-w-xs input input-bordered"
+                                    className="w-full input input-bordered"
                                     onChange={(e) =>
                                         setData("lokasi", e.target.value)
                                     }
@@ -416,7 +422,7 @@ export default function Index() {
                         <div className="flex justify-center gap-2 lg:col-span-2">
                             <button
                                 type="submit"
-                                className="btn bg-blue-600 text-white hover:bg-blue-700 btn-block max-w-lg"
+                                className="btn bg-blue-600 text-white hover:bg-blue-700 btn-block max-w-md"
                             >
                                 {loading ? (
                                     <LuLoader
@@ -424,7 +430,16 @@ export default function Index() {
                                         size={20}
                                     />
                                 ) : (
-                                    btnTitle
+                                    <>
+                                        {btnTitle}
+                                        {!Boolean(auth.user?.is_premium) && (
+                                            <span className="text-sm text-yellow-300">
+                                                {jumlah_judul == 0
+                                                    ? "(Free x1)"
+                                                    : "(Upgrade)"}
+                                            </span>
+                                        )}
+                                    </>
                                 )}
                             </button>
                         </div>

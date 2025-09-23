@@ -5,19 +5,26 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\AiJudul;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AIController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Carijudul/Index');
+        $jumlah_judul = AiJudul::where('user_id', Auth::id())->count();
+        return Inertia::render('Carijudul/Index', [
+            'jumlah_judul' => $jumlah_judul,
+        ]);
     }
 
     public function store(Request $request)
     {
         $user = Auth::user();
+        $jumlah_judul = AiJudul::where('user_id', $user->id)->count();
+        if (!$user->is_premium && $jumlah_judul > 0) {
+            return back()->with('error', "You must be a premium user to access this feature.");
+        }
+
         $validateData = $request->validate([
             'jurusan' => 'required',
             'jenis_penelitian' => 'required',
@@ -27,16 +34,7 @@ class AIController extends Controller
         ]);
         $validateData['user_id'] = $user->id;
 
-        DB::beginTransaction();
-        try {
-            $user->update(['credit' => $user->credit - 10]);
-
-            AiJudul::create($validateData);
-            DB::commit();
-            return back()->with('success', "AI generate judul successfully!");
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', $e->getMessage());
-        }
+        AiJudul::create($validateData);
+        return back()->with('success', "AI generate judul successfully!");
     }
 }

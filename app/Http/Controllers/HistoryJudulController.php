@@ -11,7 +11,7 @@ class HistoryJudulController extends Controller
 {
     public function index()
     {
-        $listJudul = AiJudul::where("user_id", Auth::user()->id)->latest()->get();
+        $listJudul = AiJudul::where("user_id", Auth::user()->id)->latest()->paginate(5);
         return Inertia::render("HistoryJudul/Index", [
             "listJudul" => $listJudul
         ]);
@@ -24,8 +24,6 @@ class HistoryJudulController extends Controller
 
     public function destroy(AiJudul $aijudul)
     {
-        // $aijudul = AiJudul::find($id);
-
         $aijudul->delete();
 
         return back()->with("success", "AI response dihapus!");
