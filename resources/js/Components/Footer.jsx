@@ -56,7 +56,7 @@ export default function Footer() {
             <aside>
                 <p>
                     Copyright © {new Date().getFullYear()} - All right reserved
-                    by SUPERWEB
+                    by LynJoki
                 </p>
             </aside>
         </footer>
